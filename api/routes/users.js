@@ -62,6 +62,7 @@ router.post('/login', (req,res,next) => {
         if(user.length < 1)
         {
             return res.status(401).json({
+                dep: "123",
                 message: "Auth failed"
             });
         }
@@ -109,7 +110,7 @@ router.post('/login', (req,res,next) => {
     });
 });
 
-router.delete('/:email', (req,res,next) => {
+router.delete('/:email',checkAuth,  (req,res,next) => {
     const useremail =  req.params.email;
     User.find({email: useremail})
     .then(doc => {
@@ -134,7 +135,7 @@ router.delete('/:email', (req,res,next) => {
     })
 })
 
-router.patch('/:stdid',(req,res,next)=>{
+router.patch('/:stdid',checkAuth, (req,res,next)=>{
     const id = req.params.stdid;
 
     User.updateOne(
@@ -157,7 +158,7 @@ router.patch('/:stdid',(req,res,next)=>{
 })
 
 
-router.patch('/password/:stdid', (req,res,next) => {
+router.patch('/password/:stdid', checkAuth,(req,res,next) => {
     const id = req.params.stdid;
 
     bcrypt.hash(req.body.password, 10, (err,hash)=>{

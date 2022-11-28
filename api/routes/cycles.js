@@ -20,7 +20,7 @@ router.get('/all', (req,res,next)=>{
     })
 })
 
-router.post('/add', (req,res,next)=>{
+router.post('/add',checkAuth, (req,res,next)=>{
     Cycle.find({cycleid:req.body.cycleid})
     .then(cycle => {
         if(cycle.length>=1)
@@ -36,6 +36,7 @@ router.post('/add', (req,res,next)=>{
                 _id: new mongoose.Types.ObjectId(),
                 cycleid: req.body.cycleid,
                 status: req.body.status,
+                stdname: req.body.stdname,
                 stdid: req.body.stdid
             })
             cycle.save()
@@ -55,7 +56,7 @@ router.post('/add', (req,res,next)=>{
     })
 })
 
-router.get('/:cycleid' ,(req,res,next) => {
+router.get('/:cycleid',checkAuth ,(req,res,next) => {
     const id= req.params.cycleid
 
     Cycle.find({cycleid: id})
@@ -64,6 +65,7 @@ router.get('/:cycleid' ,(req,res,next) => {
             _id: doc[0]._id,
             cycleid: doc[0].cycleid,
             status: doc[0].status,
+            stdname: doc[0].stdname,
             stdid: doc[0].stdid
         }
         console.log(doc);
@@ -100,7 +102,7 @@ router.patch('/:cycleid',checkAuth, (req,res,next)=>{
         })
 })
 
-router.delete('/:cycleid', (req,res,next)=>{
+router.delete('/:cycleid',checkAuth, (req,res,next)=>{
     const id = req.params.cycleid;
 
     Cycle.find({cycleid: id})
